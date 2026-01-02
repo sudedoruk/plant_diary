@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <meta charset="UTF-8">
+    <title> title </title>
+</head>
+<body>
+<h2>Bitki Bilgileri</h2>
+
+{{ plant.id }}<br>
+{{ plant.name }}<br>
+{{ plant.species }}<br>
+{{ plant.added_date }}<br>
+{{ plant.irrigation_frequency }}<br>
+<<<<<<< HEAD
+{{ plant.get_location_display }}<br>
+{{ plant.photo }}<br>
+<hr>
+
+<a href="{% url 'plant:update' plant.id %}">
+    Güncelle
+</a>
+=======
+
+<hr>
+>>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
+
+<h3>Bakım Kayıtları</h3>
+
+{% if carelogs %}
+    {% for log in plant.care_logs.all %}
+        <p>
+            {{ log.date }} <br>
+            {{ log.watered|yesno:"Sulandı,Sulanmadı" }}<br>
+            {{ log.fertilized|yesno:"Gübrelendi,Gübrelenmedi" }}<br>
+            {{ log.notes }} 
+        </p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>Bu bitki için henüz bakım kaydı yok.</p>
+{% endif %}
+<<<<<<< HEAD
+
+<a href="{% url 'plant:carelog_create' plant.id %}">
+     Yeni Bakım Kaydı Ekle
+</a>
+
+<hr>
+<form action="{% url 'plant:delete' plant.id %}" method="POST" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" onclick="return confirm('Bu bitki silinsin mi?')">
+        Sil
+    </button>
+</form>
+=======
+>>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
+</body>
+</html>

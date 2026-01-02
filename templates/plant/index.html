@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <meta charset="UTF-8">
+    <title> title </title>
+</head>
+<body>
+    <h1>Bitkiler</h1>
+    <a href="{% url 'plant:create' %}"> Yeni Bitki Ekle</a>
+<hr>
+
+    {% for plant in plants %}
+        {{plant.id}}<br>
+        <a href="{{plant.get_absolute_url}}">{{plant.name}}</a><br>
+        {{plant.species}}<br>
+        {{plant.added_date}}<br>
+        {{plant.irrigation_frequency}}<br>
+    {% endfor %}
+
+</body>
+</html>
