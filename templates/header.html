@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">
+  <div class="container-fluid">
+      
+    <a class="navbar-brand" href="{% url 'home' %}">
+        🌱 Dijital Bitki Günlüğü
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Ana Sayfa</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'plant:index' %}">Bitkilerim</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'plant:create' %}">➕ Yeni Bitki Ekle</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            İşlemler
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">💧 Sulama Zamanı Gelenler</a></li>
+            <li><a class="dropdown-item" href="#">💊 Gübreleme Zamanı Gelenler</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">🗑️ Çöp Kutusu (Arşiv)</a></li>
+          </ul>
+        </li>
+
+      </ul>
+
+      <form class="d-flex" role="search" method="GET" action="">
+        <input class="form-control me-2" type="search" name="q" placeholder="Bitki ara..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Ara</button>
+      </form>
+
+      
+
+    </div>
+  </div>
+</nav>
+

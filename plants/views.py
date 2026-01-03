@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 from django.shortcuts import render, HttpResponse,get_object_or_404,HttpResponseRedirect,redirect
 from .models import Plant,CareLog
 from .forms import PlantForm, CareLogForm
-=======
-from django.shortcuts import render, HttpResponse,get_object_or_404
-from .models import Plant,CareLog
-from .forms import PlantForm
->>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
 # Create your views here.
 def plant_index(request):
     plants=Plant.objects.all()
@@ -15,12 +9,8 @@ def plant_index(request):
 def plant_create(request):
     form = PlantForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-<<<<<<< HEAD
         plant = form.save()
         return HttpResponseRedirect(plant.get_absolute_url())
-=======
-        form.save()
->>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
         
     context = {'form': form}
     return render(request, 'plant/form.html', context)
@@ -37,7 +27,7 @@ def plant_detail(request,id):
 
 def plant_update(request,id):
     plant = get_object_or_404(Plant, id=id)
-    form = PlantForm(request.POST or None, instance=plant)
+    form = PlantForm(request.POST or None, request.FILES or None, instance=plant)
     if form.is_valid():
         form.save()
         return HttpResponseRedirect(plant.get_absolute_url())

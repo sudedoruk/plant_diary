@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>  
-    <meta charset="UTF-8">
-    <title> title </title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block body %}
+
     <h1>Bitkiler</h1>
     <a href="{% url 'plant:create' %}"> Yeni Bitki Ekle</a>
 <hr>
@@ -17,5 +14,4 @@
         {{plant.irrigation_frequency}}<br>
     {% endfor %}
 
-</body>
-</html>
+{% endblock %}

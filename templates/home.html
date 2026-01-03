@@ -1,10 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>  
-    <meta charset="UTF-8">
-    <title> title </title>
-</head>
-<body>
-    helloo,{{ isim }}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Ana Sayfa - {{block.super}}{% endblock %}
+{% block body %}
+    
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
+  <div class="container-fluid py-2">
+    <h1 class="display-5 fw-bold text-success">Hoş Geldin, {{ isim }}! 🌿</h1>
+    
+    <p class="col-md-8 fs-4 text-muted">
+        Bitkilerinin takibini yapmak artık çok kolay. Sulama zamanlarını kaçırma, yeşil dostlarını mutlu et.
+    </p>
+    
+    <div class="mt-4">
+        <a href="{% url 'plant:index' %}" class="btn btn-success btn-lg px-4 me-2 shadow-sm">
+            🌱 Bitkilerimi Listele
+        </a>
+        <a href="{% url 'plant:create' %}" class="btn btn-outline-success btn-lg px-4 shadow-sm">
+            ➕ Yeni Ekle
+        </a>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-5 text-center">
+    
+    <div class="col-md-6 mb-3">
+        <div class="card text-bg-success h-100 shadow-sm border-0">
+            <div class="card-body py-4">
+                <h2 class="card-title h4">Toplam Bitki</h2>
+                <p class="card-text display-3 fw-bold my-2">{{ toplam_bitki }}</p>
+                <p class="mb-0 opacity-75">Adet yeşil dostun var</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card bg-secondary text-white h-100 shadow-sm border-0">
+            <div class="card-body py-4">
+                <h2 class="card-title h4">Yapılan Bakım</h2>
+                <p class="card-text display-3 fw-bold my-2">{{ toplam_bakim }}</p>
+                <p class="mb-0 opacity-75">Kez sulama veya gübreleme yapıldı</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+    <h3 class="text-secondary m-0">Son Eklenen Bitkiler</h3>
+    <a href="{% url 'plant:index' %}" class="text-decoration-none text-success">Tümünü Gör &rarr;</a>
+</div>
+
+{% if son_eklenenler %}
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    
+    {% for bitki in son_eklenenler %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0 hover-effect">
+            {% if bitki.photo %}
+                <img src="{{ bitki.photo.url }}" class="card-img-top" alt="{{ bitki.name }}" 
+                     style="height: 220px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light text-secondary d-flex align-items-center justify-content-center" 
+                     style="height: 220px; font-size: 3rem;">
+                    🌿
+                </div>
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title fw-bold text-dark">{{ bitki.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ bitki.species }}</h6>
+                
+                <span class="badge bg-success bg-opacity-10 text-success mb-3">
+                    📍 {{ bitki.get_location_display }}
+                </span>
+                
+                <a href="{% url 'plant:detail' bitki.id %}" class="btn btn-outline-primary w-100 stretched-link">
+                    Detayına Git
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% else %}
+    <div class="alert alert-warning shadow-sm">
+        Henüz bitki eklenmemiş. Yukarıdaki butonla ilk bitkini ekle!
+    </div>
+{% endif %}
+
+
+<div class="py-4">
+    <h3 class="text-center text-success mb-4 fw-bold">🌿 Pratik Bakım İpuçları</h3>
+    
+    <div class="row g-4">
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="background-color: #e3f2fd;">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">💧</div>
+                    <h5 class="card-title fw-bold text-primary">Doğru Sulama</h5>
+                    <p class="card-text text-muted">
+                        Toprak tamamen kurumadan sulama yapmayın. Parmağınızı toprağa 2cm batırıp kontrol edin.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="background-color: #fff3cd;">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">☀️</div>
+                    <h5 class="card-title fw-bold text-warning">Işık İhtiyacı</h5>
+                    <p class="card-text text-muted">
+                        Doğrudan yakıcı güneş yerine, tül perde arkasından gelen "filtrelenmiş ışığı" tercih edin.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="background-color: #e8f5e9;">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">🪴</div>
+                    <h5 class="card-title fw-bold text-success">Saksı Değişimi</h5>
+                    <p class="card-text text-muted">
+                        Kökler alttan çıkmaya başladıysa değişim vakti gelmiştir. Sadece 1 boy büyük saksıya geçin.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div style="margin-bottom: 100px;"></div>
+
+{% endblock %}

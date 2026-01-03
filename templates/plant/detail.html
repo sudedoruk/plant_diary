@@ -1,10 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>  
-    <meta charset="UTF-8">
-    <title> title </title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block body %}
+
+<style>
+  /* Resim üzerine gelince el işareti çıksın */
+  #kucukResim:hover { opacity: 0.7; }
+
+  /* Arka plan karartması */
+  .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    padding-top: 50px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.9); 
+  }
+
+  /* Büyük resim özellikleri */
+  .modal-icerik {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    max-height: 80vh;
+    object-fit: contain; 
+  }
+
+  /* Kapatma butonu (X) */
+  .kapat-tusu {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+
 <h2>Bitki Bilgileri</h2>
 
 {{ plant.id }}<br>
@@ -12,18 +48,28 @@
 {{ plant.species }}<br>
 {{ plant.added_date }}<br>
 {{ plant.irrigation_frequency }}<br>
-<<<<<<< HEAD
 {{ plant.get_location_display }}<br>
-{{ plant.photo }}<br>
+<br>
+
+{% if plant.photo %}
+    <img id="kucukResim" 
+         src="{{ plant.photo.url }}" 
+         alt="{{ plant.name }}" 
+         style="width: 200px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">
+{% else %}
+    <p><i>Resim Yüklenmemiş</i></p>
+{% endif %}
+
+<div id="resimPenceresi" class="modal">
+  <span class="kapat-tusu">&times;</span>
+  <img class="modal-icerik" id="buyukResim">
+</div>
+
 <hr>
 
 <a href="{% url 'plant:update' plant.id %}">
     Güncelle
 </a>
-=======
-
-<hr>
->>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
 
 <h3>Bakım Kayıtları</h3>
 
@@ -40,7 +86,6 @@
 {% else %}
     <p>Bu bitki için henüz bakım kaydı yok.</p>
 {% endif %}
-<<<<<<< HEAD
 
 <a href="{% url 'plant:carelog_create' plant.id %}">
      Yeni Bakım Kaydı Ekle
@@ -53,7 +98,33 @@
         Sil
     </button>
 </form>
-=======
->>>>>>> 7160f4d21e2332bebb61782cb3b7a70d4d89e490
-</body>
-</html>
+
+<script>
+  // Elemanları seç
+  var modal = document.getElementById("resimPenceresi");
+  var kucukResim = document.getElementById("kucukResim");
+  var buyukResim = document.getElementById("buyukResim");
+  var kapatTusu = document.getElementsByClassName("kapat-tusu")[0];
+
+  // Resim varsa tıklama özelliğini ekle
+  if (kucukResim) {
+      kucukResim.onclick = function(){
+        modal.style.display = "block";
+        buyukResim.src = this.src; // Küçük resmin kaynağını büyüğe kopyala
+      }
+  }
+
+  // Çarpıya basınca kapat
+  kapatTusu.onclick = function() { 
+    modal.style.display = "none";
+  }
+
+  // Siyah boşluğa basınca kapat
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+{% endblock %}
