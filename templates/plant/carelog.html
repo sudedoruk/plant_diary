@@ -1,13 +1,44 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Bakım Ekle - {{ plant.name }}{% endblock %}
 
 {% block body %}
 
-<h2>{{ plant.name }} için bakım kaydı ekle</h2>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6"> <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">💧 Bakım Kaydı Ekle</h4>
+            </div>
+            
+            <div class="card-body p-4">
+                
+                <p class="text-muted mb-4">
+                    <strong>{{ plant.name }}</strong> isimli bitkiniz için bakım detaylarını giriniz.
+                </p>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Kaydet</button>
-</form>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {{ form|crispy }}
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Kaydet
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'plant:detail' plant.id %}" class="text-muted text-decoration-none">
+                &larr; İptal ve Geri Dön
+            </a>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

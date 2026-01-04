@@ -12,12 +12,24 @@
     </p>
     
     <div class="mt-4">
-        <a href="{% url 'plant:index' %}" class="btn btn-success btn-lg px-4 me-2 shadow-sm">
-            🌱 Bitkilerimi Listele
-        </a>
-        <a href="{% url 'plant:create' %}" class="btn btn-outline-success btn-lg px-4 shadow-sm">
-            ➕ Yeni Ekle
-        </a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'plant:index' %}" class="btn btn-success btn-lg px-4 me-2 shadow-sm">
+                🌱 Bitkilerimi Listele
+            </a>
+        {% else %}
+            <a href="{% url 'plant:index' %}" class="btn btn-success btn-lg px-4 me-2 shadow-sm">
+                🌱 Kayıtlı Bitkileri Listele
+            </a>
+        {% endif %}
+        {%if not request.user.is_authenticated %}
+            <a href="/admin/" class="btn btn-outline-success btn-lg px-4 shadow-sm">
+                Yeni Bitki Eklemek İçin Giriş Yap!
+            </a>
+        {%else%}
+            <a href="{% url 'plant:create' %}" class="btn btn-outline-success btn-lg px-4 shadow-sm">
+                ➕ Yeni Bitki Ekle
+            </a>
+        {% endif %}
     </div>
   </div>
 </div>

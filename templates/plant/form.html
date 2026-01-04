@@ -1,12 +1,45 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_tags %}
+
+{% block title %}Bitki Ekle{% endblock %}
+
 {% block body %}
 
-<body>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h1>BİTKİ EKLE</h1>
-        {{ form.as_p }}
-        <input type="submit" value="Kaydet">
-    </form>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6"> <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0 fw-bold">🌿 Yeni Bitki Ekle</h4>
+            </div>
+            
+            <div class="card-body p-4">
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {{ form|crispy }}
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                             Kaydet
+                        </button>
+                    </div>
+                    
+                </form>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="{{plant.get_absolute_url}}" class="text-muted text-decoration-none">
+                &larr; Bitki Detayına Geri Dön
+            </a> <br>
+            <a href="{% url 'plant:index' %}" class="text-muted text-decoration-none">
+                &larr; Listeye Geri Dön
+            </a> <br>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -10,7 +10,7 @@
   .modal {
     display: none; 
     position: fixed; 
-    z-index: 1000; 
+    z-index: 9999; 
     padding-top: 50px; 
     left: 0;
     top: 0;
@@ -41,64 +41,128 @@
   }
 </style>
 
-<h2>Bitki Bilgileri</h2>
+<div class="container mt-4">
 
-{{ plant.id }}<br>
-{{ plant.name }}<br>
-{{ plant.species }}<br>
-{{ plant.added_date }}<br>
-{{ plant.irrigation_frequency }}<br>
-{{ plant.get_location_display }}<br>
-<br>
+    <h2 class="mb-4 text-success fw-bold">
+        🌿 {{ plant.name }} Ait Bilgiler
+    </h2>
 
-{% if plant.photo %}
-    <img id="kucukResim" 
-         src="{{ plant.photo.url }}" 
-         alt="{{ plant.name }}" 
-         style="width: 200px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc;">
-{% else %}
-    <p><i>Resim Yüklenmemiş</i></p>
-{% endif %}
+    <div class="row">
+        
+        <div class="col-md-5 mb-4">
+            {% if plant.photo %}
+                <img id="kucukResim" 
+                     src="{{ plant.photo.url }}" 
+                     alt="{{ plant.name }}" 
+                     class="img-fluid rounded shadow-sm border"
+                     style="width: 100%; height: 350px; object-fit: cover; cursor: pointer;">
+                
+                <p class="text-muted text-center small mt-2">
+                    (Büyütmek için resme tıkla)
+                </p>
+            {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center border" style="height: 350px;">
+                    <span class="text-muted fs-5">Resim Yok 🍂</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    
+                    <h4 class="card-title text-success">{{ plant.name }}</h4>
+                    <h6 class="card-subtitle mb-3 text-muted">{{ plant.species }}</h6>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>📍 Konum:</strong> {{ plant.get_location_display }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>📅 Kayıt Tarihi:</strong> {{ plant.added_date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>💧 Sulama Sıklığı:</strong> {{ plant.irrigation_frequency }} günde bir
+                        </li>
+                    </ul>
+
+                    <div class="mt-4">
+                        {% if request.user.is_authenticated %}
+                            
+                            <a href="{% url 'plant:update' plant.id %}" class="btn btn-warning text-white me-2">
+                                ✏️ Bilgileri Güncelle
+                            </a>
+                            
+                            <form action="{% url 'plant:delete' plant.id %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bu bitkiyi silmek istediğine emin misin?')">
+                                    🗑️ Sil
+                                </button>
+                            </form>
+
+                        {% else %}
+                            <div class="alert alert-warning">
+                                🔒 Düzenleme yapmak için giriş yapmalısın.
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-primary">📋 Bakım Geçmişi</h3>
+        
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'plant:carelog_create' plant.id %}" class="btn btn-primary">
+                ➕ Yeni Bakım Ekle
+            </a>
+        {% endif %}
+    </div>
+
+    {% if carelogs %}
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for log in carelogs %}
+            <div class="col">
+                <div class="card shadow-sm border-start border-primary border-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold">{{ log.date }}</h6>
+                            
+                            <div>
+                                {% if log.watered %}
+                                    <span class="badge bg-info text-dark">Sulandı</span>
+                                {% endif %}
+                                {% if log.fertilized %}
+                                    <span class="badge bg-warning text-dark">Gübrelendi</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if log.notes %}
+                            <p class="mt-2 mb-0 text-muted fst-italic">"{{ log.notes }}"</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-light border text-center">
+            Henüz hiç bakım kaydı girilmemiş.
+        </div>
+    {% endif %}
+
+</div>
 
 <div id="resimPenceresi" class="modal">
   <span class="kapat-tusu">&times;</span>
   <img class="modal-icerik" id="buyukResim">
 </div>
-
-<hr>
-
-<a href="{% url 'plant:update' plant.id %}">
-    Güncelle
-</a>
-
-<h3>Bakım Kayıtları</h3>
-
-{% if carelogs %}
-    {% for log in plant.care_logs.all %}
-        <p>
-            {{ log.date }} <br>
-            {{ log.watered|yesno:"Sulandı,Sulanmadı" }}<br>
-            {{ log.fertilized|yesno:"Gübrelendi,Gübrelenmedi" }}<br>
-            {{ log.notes }} 
-        </p>
-        <hr>
-    {% endfor %}
-{% else %}
-    <p>Bu bitki için henüz bakım kaydı yok.</p>
-{% endif %}
-
-<a href="{% url 'plant:carelog_create' plant.id %}">
-     Yeni Bakım Kaydı Ekle
-</a>
-
-<hr>
-<form action="{% url 'plant:delete' plant.id %}" method="POST" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" onclick="return confirm('Bu bitki silinsin mi?')">
-        Sil
-    </button>
-</form>
-
 <script>
   // Elemanları seç
   var modal = document.getElementById("resimPenceresi");
@@ -128,3 +192,20 @@
 </script>
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
