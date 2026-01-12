@@ -6,6 +6,9 @@ from django.contrib import messages
 # Create your views here.
 def plant_index(request):
     plants=Plant.objects.all()
+    query=request.GET.get('q')
+    if query:
+        plants=plants.filter(name__icontains=query)
     return render(request,'plant/index.html',{'plants':plants})
 
 def plant_create(request):
@@ -42,7 +45,7 @@ def plant_update(request,id):
         messages.success(request, 'Bitki kaydı başarıyla güncellendi!',extra_tags='mesaj-basarili')
 
         return HttpResponseRedirect(plant.get_absolute_url())
-    context = {'form': form}
+    context = {'form': form, 'plant': plant}
     return render(request, 'plant/form.html', context)
 
 def carelog_create(request,id):
@@ -62,3 +65,4 @@ def carelog_create(request,id):
         'form': form,
         'plant': plant
     })
+

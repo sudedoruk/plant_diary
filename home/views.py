@@ -1,13 +1,23 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
+from plants.models import Plant, CareLog
 
-# Create your views here.
 def home_view(request):
-    if request.user.is_authenticated :
-        context={
-            'isim':'sude',
-        }
+    if request.user.is_authenticated:
+        isim = "sude"
+        plant_count = Plant.objects.count()
+        carelog_count = CareLog.objects.count()
+        son_eklenenler = Plant.objects.order_by('-added_date')[:3]
     else:
-        context={
-            'isim':'misafir',
-        }
-    return render(request,'home.html',context)
+        isim = "misafir"
+        plant_count = 0
+        carelog_count = 0
+        son_eklenenler=[]
+    context = {
+        "isim": isim,
+        "plant_count": plant_count,
+        "carelog_count": carelog_count,
+        "son_eklenenler": son_eklenenler,
+    }
+
+    return render(request, 'home.html', context)
+

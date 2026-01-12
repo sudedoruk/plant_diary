@@ -40,7 +40,7 @@
         <div class="card text-bg-success h-100 shadow-sm border-0">
             <div class="card-body py-4">
                 <h2 class="card-title h4">Toplam Bitki</h2>
-                <p class="card-text display-3 fw-bold my-2">{{ toplam_bitki }}</p>
+                <p class="card-text display-3 fw-bold my-2">{{ plant_count }}</p>
                 <p class="mb-0 opacity-75">Adet yeşil dostun var</p>
             </div>
         </div>
@@ -50,7 +50,7 @@
         <div class="card bg-secondary text-white h-100 shadow-sm border-0">
             <div class="card-body py-4">
                 <h2 class="card-title h4">Yapılan Bakım</h2>
-                <p class="card-text display-3 fw-bold my-2">{{ toplam_bakim }}</p>
+                <p class="card-text display-3 fw-bold my-2">{{ carelog_count }}</p>
                 <p class="mb-0 opacity-75">Kez sulama veya gübreleme yapıldı</p>
             </div>
         </div>
@@ -59,6 +59,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
     <h3 class="text-secondary m-0">Son Eklenen Bitkiler</h3>
+
+    
+
     <a href="{% url 'plant:index' %}" class="text-decoration-none text-success">Tümünü Gör &rarr;</a>
 </div>
 
